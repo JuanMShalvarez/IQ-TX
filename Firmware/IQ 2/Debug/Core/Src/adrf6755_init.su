@@ -1,0 +1,2 @@
+../Core/Src/adrf6755_init.c:22:26:adrf_wr	32	static
+../Core/Src/adrf6755_init.c:64:19:adrf6755_init	16	static
