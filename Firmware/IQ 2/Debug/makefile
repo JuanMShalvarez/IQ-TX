@@ -67,8 +67,8 @@ all: main-build
 main-build: IQ\ 2.elf secondary-outputs
 
 # Tool invocations
-IQ\ 2.elf IQ\ 2.map: $(OBJS) $(USER_OBJS) G:\STM32CubeIDE\ Workspace\IQ\ 2\STM32G474CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "IQ 2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"G:\STM32CubeIDE Workspace\IQ 2\STM32G474CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="IQ 2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+IQ\ 2.elf IQ\ 2.map: $(OBJS) $(USER_OBJS) C:\Users\shako\OneDrive\Desktop\IQ-TX\Firmware\IQ\ 2\STM32G474CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "IQ 2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\shako\OneDrive\Desktop\IQ-TX\Firmware\IQ 2\STM32G474CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="IQ 2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

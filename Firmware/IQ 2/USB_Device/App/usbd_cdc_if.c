@@ -22,7 +22,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+extern DAC_HandleTypeDef hdac1;
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,9 +31,6 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define RING_SIZE 4096
-extern volatile uint8_t  ring[RING_SIZE];
-extern volatile uint16_t ring_head, ring_tail;
 
 
 /* USER CODE END PV */
@@ -264,15 +261,19 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-	for (uint32_t i = 0; i < *Len; i++) {
-		uint16_t next = (ring_head + 1) & (RING_SIZE - 1);
-		if (next == ring_tail) break;          // full: drop
-		ring[ring_head] = Buf[i];
-		ring_head = next;
-	}
-	USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-	USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-	return (USBD_OK);
+  for (uint32_t i = 0; i < *Len; i++)
+  {
+    uint8_t c = Buf[i];
+    if (c >= '0' && c <= '9')
+    {
+      uint8_t code = (uint8_t)((c - '0') * 10);   /* 0..90 */
+      HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_8B_R, code);
+    }
+    /* anything else (CR/LF etc.) ignored */
+  }
+  USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+  return (USBD_OK);
   /* USER CODE END 6 */
 }
 
